@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.BookDao">
+    <sql id="mySelect" >
+		id,book_name bookName,author,price,dd_price ddPrice,company,
+		publish_Time publishTime ,public_count publicCount,isbn,print_time printTime,
+		print_count printCount,sale_count saleCount,cate_id cateId,e_recommend eRecommend,
+		src,stock,edition,impression,format,paper,packaging,pagination,recom,brief,
+		about_author aboutAuthor,directory,media
+	</sql>
+    <resultMap type="Book" id="myBook">
+        <id column="id" property="id"/>
+        <result column="bookName" property="bookName"/>
+        <result column="author" property="author"/>
+        <result column="price" property="price"/>
+        <result column="ddPrice" property="ddPrice"/>
+        <result column="company" property="company"/>
+        <result column="publishTime" property="publishTime"/>
+        <result column="publicCount" property="publicCount"/>
+        <result column="isbn" property="isbn"/>
+        <result column="printTime" property="printTime"/>
+        <result column="printCount" property="printCount"/>
+        <result column="saleCount" property="saleCount"/>
+        <result column="cateId" property="cateId"/>
+        <result column="eRecommend" property="eRecommend"/>
+        <result column="src" property="src"/>
+        <result column="stock" property="stock"/>
+        <result column="edition" property="edition"/>
+        <result column="impression" property="impression"/>
+        <result column="format" property="format"/>
+        <result column="paper" property="paper"/>
+        <result column="packaging" property="packaging"/>
+        <result column="pagination" property="pagination"/>
+        <result column="recom" property="recom"/>
+        <result column="brief" property="brief"/>
+        <result column="aboutAuthor" property="aboutAuthor"/>
+        <result column="directory" property="directory"/>
+        <result column="media" property="media"/>
+        <association property="category" javaType="Category">
+            <id column="id1" property="id"/>
+            <result column="cateName1" property="cateName"/>
+            <result column="count1" property="count"/>
+            <result column="parentId1" property="parentId"/>
+            <result column="level1" property="levels"/>
+            <association property="category" javaType="Category">
+                <id column="id2" property="id"/>
+                <result column="cateName2" property="cateName"/>
+                <result column="count2" property="count"/>
+                <result column="parentId2" property="parentId"/>
+                <result column="level2" property="levels"/>
+            </association>
+        </association>
+    </resultMap>
+<!--模糊查询-->
+    <select id="queryByKey" resultType="Book">
+        select id,book_name bookName,author,price,dd_price ddPrice,company,
+        publish_Time publishTime ,public_count publicCount,isbn,print_time printTime,
+        print_count printCount,sale_count saleCount,cate_id cateId,e_recommend eRecommend,
+        src,stock,edition,impression,format,paper,packaging,pagination,recom,brief,
+        about_author aboutAuthor,directory,media
+        from d_book
+        <where>
+            <if test="key == 'name' and content != null and content != ''">
+                and book_name like '%' || #{content} || '%'
+            </if>
+            <if test="key == 'author' and content != null and content != ''">
+                and author like '%' || #{content} || '%'
+            </if>
+            <if test="key == 'press' and content != null and content != ''">
+                and company like '%' || #{content} || '%'
+            </if>
+        </where>
+    </select>
+<!--    添加-->
+    <!-- 添加图书 -->
+    <insert id="insertBook" parameterType="Book">
+		insert into d_book(id,book_name,cate_id,price,
+		dd_price,stock,author,company,
+		publish_time,edition,print_time,impression,
+		isbn,format,paper,packaging,
+		pagination,public_count,src,recom,
+		brief,about_author,directory,media)
+
+		values(#{id},#{bookName,jdbcType=VARCHAR},#{cateId,jdbcType=VARCHAR},#{price,jdbcType=NUMERIC},
+		#{ddPrice,jdbcType=NUMERIC},#{stock,jdbcType=VARCHAR},#{author,jdbcType=VARCHAR},#{company,jdbcType=VARCHAR},
+		#{publishTime,jdbcType=DATE},#{edition,jdbcType=VARCHAR},#{printTime,jdbcType=DATE},#{impression,jdbcType=VARCHAR},
+		#{isbn,jdbcType=VARCHAR},#{format,jdbcType=VARCHAR},#{paper,jdbcType=VARCHAR},#{packaging,jdbcType=VARCHAR},
+		#{pagination,jdbcType=VARCHAR},#{publicCount,jdbcType=NUMERIC},#{src,jdbcType=VARCHAR},#{recom,jdbcType=VARCHAR},
+		#{brief,jdbcType=VARCHAR},#{aboutAuthor,jdbcType=VARCHAR},#{directory,jdbcType=VARCHAR},#{media,jdbcType=VARCHAR})
+	</insert>
+
+    <!--修改图书  -->
+    <update id="updateBook" parameterType="Book">
+        update d_book
+        <set>
+            <if test="bookName!=null">book_name=#{bookName},</if>
+            <if test="author!=null">author=#{author},</if>
+            <if test="price!=null">price=#{price},</if>
+            <if test="ddPrice!=null">dd_price=#{ddPrice},</if>
+            <if test="company!=null">company=#{company},</if>
+            <if test="publishTime!=null">publish_time=#{publishTime},</if>
+            <if test="publicCount!=null">public_count=#{publicCount},</if>
+            <if test="isbn!=null">isbn=#{isbn},</if>
+            <if test="printTime!=null">print_time=#{printTime},</if>
+            <if test="printCount!=null">print_count=#{printCount},</if>
+            <if test="saleCount!=null">sale_count=#{saleCount},</if>
+            <if test="cateId!=null">cate_id=#{cateId},</if>
+            <if test="eRecommend!=null">e_recommend=#{eRecommend},</if>
+            <if test="src!=null">src=#{src},</if>
+            <if test="stock!=null">stock=#{stock},</if>
+            <if test="edition!=null">edition=#{edition},</if>
+            <if test="impression!=null">impression=#{impression},</if>
+            <if test="format!=null">format=#{format},</if>
+            <if test="paper!=null">paper=#{paper},</if>
+            <if test="packaging!=null">packaging=#{packaging},</if>
+            <if test="pagination!=null">pagination=#{pagination},</if>
+            <if test="recom!=null">recom=#{recom},</if>
+            <if test="brief!=null">brief=#{brief},</if>
+            <if test="aboutAuthor!=null">about_author=#{aboutAuthor},</if>
+            <if test="directory!=null">directory=#{directory},</if>
+            <if test="media!=null">media=#{media},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="queryByHot" resultType="Book">
+        select <include refid="mySelect"/>
+        from d_book
+        where sale_count &gt;0 and rownum &lt;=8
+        order by sale_count desc
+    </select>
+
+    <select id="queryByNew" resultType="Book">
+        select <include refid="mySelect"/>
+        from d_book
+        where  rownum &lt;=8
+        order by publish_time desc
+    </select>
+
+    <select id="queryByHotBoard" resultType="Book">
+        select <include refid="mySelect"/>
+        from d_book
+        where sale_count &gt;0 and rownum &lt;=8
+        order by publish_time desc,sale_count desc
+    </select>
+
+    <select id="queryByRecommend" resultType="Book">
+        select <include refid="mySelect"/>
+        from(select * from d_book order by dbms_random.value)
+        where rownum &lt;3
+    </select>
+
+    <select id="querySplitOneTwoBook" resultMap="myBook">
+        select * from (select tb1.* ,rownum rn from (
+        select b.id,book_name bookName,author,price,b.dd_price ddPrice,company,
+        publish_Time publishTime ,public_count publicCount,isbn,print_time printTime,
+        print_count printCount,sale_count saleCount,cate_id cateId,e_recommend eRecommend,
+        src,stock,edition,impression,format,paper,packaging,pagination,recom,brief,
+        about_author aboutAuthor,directory,media,c1.id id1,c1.cate_Name cateName1,c2.id id2,c2.cate_Name cateName2
+        from d_book b join d_category c1
+        on b.cate_id = c1.id
+        join d_category c2
+        on c1.parent_id = c2.id
+        where c2.id = #{fid}
+        <if test="sid !=null and sid !=''">
+            and c1.id = #{sid,jdbcType=VARCHAR}
+        </if>)tb1 where rownum &lt;= #{currentPage}*#{pageSize})
+        where rn &gt;(#{currentPage}-1)*#{pageSize}
+    </select>
+
+    <select id="querySplitCountBook" resultType="Integer">
+        select count(*)
+        from(select b.id,book_name bookName,author,price,b.dd_price ddPrice,company,
+        publish_Time publishTime ,public_count publicCount,isbn,print_time printTime,
+        print_count printCount,sale_count saleCount,cate_id cateId,e_recommend eRecommend,
+        src,stock,edition,impression,format,paper,packaging,pagination,recom,brief,
+        about_author aboutAuthor,directory,media,c1.id id1,c1.cate_Name cateName1,c2.id id2,c2.cate_Name cateName2
+        from d_book b join d_category c1
+        on b.cate_id = c1.id
+        join d_category c2
+        on c1.parent_id = c2.id
+        where c2.id = #{fid}
+        <if test="sid !=null and sid !=''">
+            and c1.id = #{sid,jdbcType=VARCHAR}
+        </if>)
+    </select>
+
+    <!-- 查一本书详细信息 -->
+    <select id="queryDetailBook" resultMap="myBook">
+		select b.id,book_name bookName,author,price,b.dd_price ddPrice,company,
+		publish_Time publishTime ,public_count publicCount,isbn,print_time printTime,
+		print_count printCount,sale_count saleCount,cate_id cateId,e_recommend eRecommend,
+		src,stock,edition,impression,format,paper,packaging,pagination,recom,brief,
+		about_author aboutAuthor,directory,media,c1.id id1,c1.cate_Name cateName1,c2.id id2,c2.cate_Name cateName2
+		from d_book b join d_category c1
+		on b.cate_id = c1.id
+		join d_category c2
+		on c1.parent_id = c2.id
+		where b.id = #{id}
+	</select>
+</mapper>

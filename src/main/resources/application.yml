@@ -1,0 +1,22 @@
+server:
+  port: 8989
+  servlet:
+    context-path: /dangdang
+mybatis:
+  mapper-locations: classpath:com/baizhi/mapper/*DaoMapper.xml
+  type-aliases-package: com.baizhi.entity
+
+spring:
+  mvc:
+    view:
+      prefix: /
+      suffix: .jsp
+  datasource:
+    password: hr
+    username: hr
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:xe
+logging:
+  level:
+    com.baizhi.wbj.dao: debug
